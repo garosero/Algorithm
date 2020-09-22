@@ -39,3 +39,6 @@ var shuffle2 = function(nums,n){
 }
 
 console.log(shuffle2([2,5,1,3,4,7],3));
+
+
+
