@@ -1,4 +1,6 @@
 function solution(routes){
+    //현재 카메라 경로에서 겹치는 부분으로 카메라 경로를 줄여감
+    //겹치는 게 없다면 카메라 위치를 새로 갱신 
     var answer = 1;
 
     routes.sort((a,b)=>{
@@ -25,49 +27,34 @@ function solution(routes){
 
 }
 
-// function solution(routes) {
-//   var answer = 0;
+function solution2(routes){
+    //현재 카메라 위치에서 몇 개나 겹치나. 겹치는 게 없다면 카메라 위치 새로 갱신 
+    var answer = 0;
+    routes.sort((a,b)=>a[1]-b[1]); //진출기점으로 소트 
+    console.log(routes);
+    let checked = Array(routes.length).fill(0); //카메라를 만났는지의 체크 배열 
+    let camera;
 
-//   //우선 첫번째 경로로 세팅
-//   let camera = [routes[0]];
-//   routes.forEach((route, idx) => {
-//     let flag = 0;
+    for(let i=0;i<routes.length;i++){
+        if(checked[i] === 0){
+            camera = routes[i][1] //진출지점에 카메라 갱신 
+            console.log("camera : " + camera + " i :" + i);
+            answer += 1;
+        }
+        for(let j=i+1;j<routes.length;j++){
+            //다음 차의 진입지점, 진출지점이 카메라 위치 사이이고 카메라 체크가 안되어있다면
+            if(routes[j][0] <= camera && camera <= routes[j][1] && checked[j] === 0){
+                checked[j] = 1;
+                break;
+            }
+        }
+    }
 
-//     //진입지점, 진출지점 비교하여 겹친다면 더 작은 범위로 값 세팅
-//     camera.forEach((cam) => {
-//       if (cam === route) return;
-
-//       //겹치는지 확인
-//       if (cam[0] >= route[0]) {
-//         if (cam[1] <= route[1]) flag = 1;
-//         else {
-//           if (route[1] >= cam[0]) {
-//             flag = 1;
-//             cam[1] = route[1];
-//           }
-//         }
-//       } else {
-//         if (cam[1] <= route[1]) {
-//           flag = 1;
-//           cam[0] = route[0];
-//           cam[1] = route[1];
-//         } else {
-//           if (cam[1] >= route[0]) {
-//             flag = 1;
-//             cam[0] = route[0];
-//           }
-//         }
-//       }
-//     });
-
-//     //겹치지않는다면 카메라에 푸시
-//     if (flag === 0) camera.push(route);
-//   });
-//   return camera.length;
-// }
+    return answer;
+}
 
 console.log(
-  solution([
+  solution2([
     [-20, 15],
     [-14, -5],
     [-18, -13],
